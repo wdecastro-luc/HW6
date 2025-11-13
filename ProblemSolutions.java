@@ -65,10 +65,22 @@ public class ProblemSolutions {
 
   public static int lastBoulder(int[] boulders) {
 
-      //
-      // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
-      //
-      return -1;
+      PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+
+      for (int b : boulders) {
+          pq.add(b);
+      }
+
+      while (pq.size() > 1) {
+          int y = pq.poll();
+          int x = pq.poll();
+
+          if (y != x) {
+              pq.add(y - x);
+          }
+      }
+
+      return pq.isEmpty() ? 0 : pq.peek();
   }
 
 
@@ -91,11 +103,23 @@ public class ProblemSolutions {
 
     public static ArrayList<String> showDuplicates(ArrayList<String> input) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
+        HashMap<String, Integer> counts = new HashMap<>();
 
+        for (String str : input) {
+            counts.put(str, counts.getOrDefault(str, 0) + 1);
+        }
+
+        ArrayList<String> duplicates = new ArrayList<>();
+
+        for (String key : counts.keySet()) {
+            if (counts.get(key) > 1) {
+                duplicates.add(key);
+            }
+        }
+
+        Collections.sort(duplicates);
+
+        return duplicates;
     }
 
 
@@ -131,9 +155,26 @@ public class ProblemSolutions {
 
     public static ArrayList<String> pair(int[] input, int k) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+            ArrayList<String> result = new ArrayList<>();
+            HashSet<Integer> seen = new HashSet<>();
+            HashSet<String> uniquePairs = new HashSet<>();
+
+            for (int num : input) {
+                int complement = k - num;
+
+                if (seen.contains(complement)) {
+                    int a = Math.min(num, complement);
+                    int b = Math.max(num, complement);
+                    uniquePairs.add("(" + a + ", " + b + ")");
+                }
+
+                seen.add(num);
+            }
+
+            result.addAll(uniquePairs);
+
+            Collections.sort(result);
+
+            return result;
     }
 }
